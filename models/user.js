@@ -36,3 +36,31 @@ const userSchema = new mongoose.Schema(
     },
     { timestamps: true }
 );
+
+// virtual field
+userSchema
+    .virtual("password") // sending pwd from the client side
+    .set(function(password) {
+        this._password = password;
+        this.salt = uuidv1(); // import the uuid package to hash the pwd
+        this.hashed_password = this.encryptPassword(password);  // encrypt the pwd
+    })
+    .get(function() {
+        return this._password;
+    });
+
+userSchema.methods = {
+    encryptPassword: function(password) {
+        if (!password) return ""; // if there is no pwd
+        try { // if there is pwd
+            return crypto
+                .createHmac("sha1", this.salt)
+                .update(password)
+                .digest("hex");
+        } catch (err) { // if there is error
+            return "";
+        }
+    }
+};
+
+module.exports = mongoose.model("User", userSchema);
