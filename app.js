@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const expressValidator = require("express-validator");
 require("dotenv").config();
 
 // import routes
@@ -23,6 +24,7 @@ mongoose
 app.use(morgan("dev")); // to simplify the process of logging requests to the application
 app.use(bodyParser.json()); // to get json data from request body
 app.use(cookieParser()); // for user's credentials in cookies
+app.use(expressValidator()); // to validate user data
 
 // routes middleware
 app.use("/api", userRoutes);
