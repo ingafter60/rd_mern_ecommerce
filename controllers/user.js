@@ -6,7 +6,7 @@ exports.signup = (req, res) => {
     user.save((err, user) => { // get error or save user to db
         if (err) { // if error
             return res.status(400).json({
-                error
+                err
             });
         }
         res.json({ // response (with json) after saving the newly users
